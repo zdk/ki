@@ -1,9 +1,5 @@
 # ki - KIND Interactive
 
-[![Test Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/zdk/3a3bf8eec6b845a6a5d9ef53d0b71e42/raw/ki-coverage.json)](https://github.com/zdk/ki/actions/workflows/test-coverage.yml)
-[![Go Report Card](https://goreportcard.com/badge/github.com/zdk/ki)](https://goreportcard.com/report/github.com/zdk/ki)
-[![codecov](https://codecov.io/gh/zdk/ki/branch/main/graph/badge.svg)](https://codecov.io/gh/zdk/ki)
-
 A wrapper for kind - use kind interactively
 
 ![ki demo](./docs/demo.gif)
