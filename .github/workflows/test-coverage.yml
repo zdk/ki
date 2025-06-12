@@ -1,0 +1,47 @@
+name: Test Coverage
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.24.3'
+    
+    - name: Run tests with coverage
+      run: |
+        go test -v -coverprofile=coverage.out ./...
+        go tool cover -html=coverage.out -o coverage.html
+    
+    - name: Calculate coverage
+      run: |
+        COVERAGE=$(go tool cover -func=coverage.out | grep total | awk '{print $3}' | sed 's/%//')
+        echo "COVERAGE=$COVERAGE" >> $GITHUB_ENV
+        echo "Test coverage: $COVERAGE%"
+    
+    - name: Generate coverage badge
+      uses: schneegans/dynamic-badges-action@v1.7.0
+      with:
+        auth: ${{ secrets.GITHUB_TOKEN }}
+        gistID: ${{ secrets.GIST_ID }}
+        filename: ki-coverage.json
+        label: Coverage
+        message: ${{ env.COVERAGE }}%
+        color: ${{ env.COVERAGE > 80 && 'brightgreen' || env.COVERAGE > 60 && 'yellow' || 'red' }}
+    
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        file: ./coverage.out
+        token: ${{ secrets.CODECOV_TOKEN }}
+        fail_ci_if_error: false
